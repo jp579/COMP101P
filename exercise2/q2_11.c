@@ -6,7 +6,6 @@ b) To print the squares of the even numbers between 1 and 101.
 c) To print the prime numbers between 1 and 100.
  */
 
-
 #include <stdio.h>
 
 void squares(int num){
@@ -28,15 +27,12 @@ int isPrime(int number){
   return 1;
 }
 
-
 void prime(int end){
   for(unsigned int i = 2; i < end; i++){
     if(isPrime(i) == 1)
       printf("%i\n", i);
   }
 }
-
-
 
 int main(void){
   printf(" a)\n");
