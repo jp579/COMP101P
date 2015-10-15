@@ -14,16 +14,36 @@ void squares(int num){
 }
 
 void printSquares(int begin, int end, int bool){
-  for(int i = begin; i < end; i++){
+  for(unsigned int i = begin; i < end; i++){
     if( (bool == 1 && i % 2 == 0) || bool == 0) 
       squares(i);
   }
 }
 
+int isPrime(int number){
+  for(unsigned int i = 2; i < number; i++){
+    if(number % i == 0)
+      return 0;
+  }
+  return 1;
+}
+
+
+void prime(int end){
+  for(unsigned int i = 2; i < end; i++){
+    if(isPrime(i) == 1)
+      printf("%i\n", i);
+  }
+}
+
+
 
 int main(void){
+  printf(" a)\n");
   printSquares(1, 101, 0);
+  printf(" b)\n");
   printSquares(1, 101, 1);
-  //prime(100);
+  printf(" c)\n");
+  prime(100);
   return 0;
 }
