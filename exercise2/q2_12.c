@@ -85,19 +85,21 @@ int* convertIntoPixel(double x, double y){
 
 }
 
-void drawSin(){
+void drawCosSinTan(){
   for(double x = -360.0; x < 360.0; x+= 0.1){
     double y = sin(x * PI/180);
     int* pixel = convertIntoPixel(x, y);
+    setColour(green);
     drawRect(pixel[0], pixel[1], 1, 1);
-  }
-  return;
-}
-
-void drawCos(){
-  for(double x = -360.0; x < 360.0; x+= 0.1){
-    double y = cos(x * PI / 180);
-    int* pixel = convertIntoPixel(x, y);
+    
+    y = cos(x * PI/180);
+    pixel = convertIntoPixel(x, y);
+    setColour(red);
+    drawRect(pixel[0], pixel[1], 1, 1);
+    
+    y = tan(x * PI/180);
+    pixel = convertIntoPixel(x, y);
+    setColour(yellow);
     drawRect(pixel[0], pixel[1], 1, 1);
   }
   return;
@@ -105,9 +107,6 @@ void drawCos(){
 
 int main(void){
   drawCosy();  
-  setColour(green);
-  drawSin();
-  setColour(red);
-  drawCos();
+  drawCosSinTan();
   return 0;
 }
