@@ -18,16 +18,29 @@ int getDigits(long int number){
   return digits;
 }
 
+long int myPow(long int a, int b){
+  if(b == 0) return 1;
+  long int num = a;
+  for(; b > 1; b--)
+    num *= a;
+  return num;
+}
+
 long int reverse(long int number){
-  long int new = 0;
-  int powerofTen = 1;
-  printf("digits: %d\n", getDigits(number)); 
-  //for(int i = 1, digits = getDigits(number); i <= digits; i++){
-  return 0;  
+  long int num = 0;
+  int digits = getDigits(number); 
+  for(int i = 1; i <= digits; i++){
+    long int tmp = number % myPow(10, 1);
+    number = number / 10;
+    num += tmp * myPow(10, digits-i);
+  }
+  return num;
 }
 int main(void){
   long int a;
   a = readInput();
-  long b = reverse(a);
+  printf("is");
+  if ( a != reverse(a)) printf(" not");
+  printf(" a palindrome\n" );
   return 0;
 }
