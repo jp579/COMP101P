@@ -12,7 +12,10 @@ scanf("%d:%d", &hours, &minutes); // Match input like 20:08
 void readAndInsertData(int arr[3]){
 	int hours;
 	printf("Please type in the time to be converted: HH:MM\n");
+	do {
 	scanf("%2d:%2d" , &hours, &arr[1]);
+	}
+	while(arr[1] > 59 || hours > 24 || hours < 0 || arr[1] < 0);
 	// 0 = am ; 1 = pm
 	if(hours < 12 || hours == 24) 
 		arr[2] = 0;
