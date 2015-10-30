@@ -21,6 +21,7 @@ void readAndInsertData(int arr[3]){
 		arr[2] = 0;
 	else
 		arr[2] = 1;
+	
 	if (hours == 12 || hours == 24 || hours == 0) 
 		arr[0] = 12;
 	else
