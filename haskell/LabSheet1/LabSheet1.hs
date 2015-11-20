@@ -29,8 +29,7 @@ capitalise xs = toUpper (head xs) : [toLower x | x<-tail xs]
 
 length' xs = sum [1 | _ <- xs]
 
-toLower'::String->String
-toLower' xs = [toLower x | x <- xs, length' xs > 0]
-
 title::[String]->[String]
-title xxs = capitalise (head xxs) : [if length' xs < 5 then toLower' xs else capitalise xs | xs <- tail xxs]
+title xxs = capitalise (head xxs) : 
+            [if length' xs < 5 then map toLower xs else capitalise xs 
+            | xs <- tail xxs, length' xs > 0]
