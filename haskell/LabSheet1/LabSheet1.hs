@@ -10,9 +10,7 @@ isTriple::Int->Int->Int->Bool
 isTriple a b c = pyth a b == square c
 
 isTripleAny::Int->Int->Int->Bool
-isTripleAny a b c = if a > b && a > c then isTriple b c a
-               else if b > a  && b > c then isTriple a c b 
-               else isTriple a b c
+isTripleAny a b c = isTriple a b c || isTriple a c b || isTriple c b a
 
 halfEvens::[Int]->[Int]
 halfEvens xs = [if x `mod` 2 == 0 then x `div` 2 else x | x<-xs]

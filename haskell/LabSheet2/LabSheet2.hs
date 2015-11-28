@@ -49,6 +49,7 @@ msort xs =  merge
             
 rotor :: Int -> [a] -> [a]
 rotor 0 xs = xs
+rotor 26 xs = xs
 rotor r xs  | r < 0             = error "smaller than 0"
             | r >= (length' xs) = error ">= than length' xs"
             | otherwise         = rotor (r - 1) (tail xs ++ [head xs]) 
@@ -73,6 +74,18 @@ normalise (x:xs)    | x `elem` ['A'..'Z']   = x : normalise xs
 encipherStr :: Int -> String -> String
 encipherStr a str = [encipher a x | x <- (normalise str)]
 
+decipher_lookUp :: Char -> [(Char, Char)] -> Char
+decipher_lookUp c xs| c `elem` ['A'..'Z']   = fst (head [x | x <- xs, snd x == c])
+                    | otherwise             = c
+
+decipher :: Int -> Char -> Char
+decipher x c =  decipher_lookUp c (makeKey x)
+
+decipherStr :: Int -> String -> String
+decipherStr a str = [decipher a x | x <- str] 
+
+bruteforce :: String -> [String]
+bruteforce str = [decipherStr a str | a <- [1..25]]
 
 
 
