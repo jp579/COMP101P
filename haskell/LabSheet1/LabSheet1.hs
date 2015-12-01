@@ -29,5 +29,4 @@ length' xs = sum [1 | _ <- xs]
 
 title::[String]->[String]
 title xxs = capitalise (head xxs) : 
-            [if length' xs < 5 then map toLower xs else capitalise xs 
-            | xs <- tail xxs, length' xs > 0]
+            [if length' xs < 5 then map toLower xs else capitalise xs | xs <- tail xxs, length' xs > 0]
