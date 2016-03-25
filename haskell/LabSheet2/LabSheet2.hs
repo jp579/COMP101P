@@ -71,6 +71,14 @@ normalise (x:xs)    | x `elem` ['A'..'Z']   = x : normalise xs
                     | x `elem` ['a'..'z']   = toUpper x : normalise xs
                     | otherwise             = normalise xs
 
+normalise' :: String -> String
+normalise' xs = [if x `elem` ['a'..'z'] then toUpper x
+                 else x | x <- xs, x `elem` dx]
+        where dx = ['0'..'9'] ++ ['a'..'z'] ++ ['A'..'Z'] 
+
+prop_normalize :: String -> Bool
+prop_normalize xs = normalise xs == normalise' xs
+
 encipherStr :: Int -> String -> String
 encipherStr a str = [encipher a x | x <- (normalise str)]
 

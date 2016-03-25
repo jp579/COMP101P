@@ -71,10 +71,10 @@ int main(void){
 		int pos = 0;
 		for(int i = 0; i <  charsPerLine; i++){
 			pos = line*charsPerLine+i;
-			printf("%c" , arr[pos]);
-
-			if((pos) % 39 == 0 && pos != 0)
+			if (pos % (charsPerLine-1) == 0 && pos != 0){
 				printf("\n");
+			} else
+				printf("%c" , arr[pos]);
 		}
 	}
 

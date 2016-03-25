@@ -19,7 +19,8 @@ class Alien extends Being {
     this.ID = ID;
   }
 
-  public void update() {     
+  public void update() {   
+    // test  
   }
 
   public void draw() {

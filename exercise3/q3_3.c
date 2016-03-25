@@ -1,5 +1,6 @@
 // written by janos potecki 23 oct 2015
-/* a program to determine if a long int is a palindrome (i.e., represents the same value when reversed, for example 123454321).*/
+/* a program to determine if a long int is a palindrome 
+(i.e., represents the same value when reversed, for example 123454321).*/
 
 #include <stdio.h>
 
