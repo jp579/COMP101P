@@ -4,26 +4,35 @@ import Control.Monad
 
 
 main = do
-    game $ zip [0..4] [5,4..1]
+    game $ [0..5]
 
-game :: [(Int, Int)] -> IO ()
-game xs = when (gameNotFinished (unzipGame xs)) $ do
-            printGameField $ unzipGame xs
+game :: [Int] -> IO ()
+game xs = when (gameNotFinished xs) $ do
+            putStrLn " "
+            printGameField xs
             putStrLn "Row: "
-            row <- getChar
-            putChar row
+            row <- getLine
+            --putChar row
             putStrLn "num of stones: "
-            stones <- getChar
-            putChar stones
-            game xs
+            stones <- getLine
+            let r = digitToInt (row!!0)
+                s = digitToInt (stones!!0)
+            --putChar stones
+            game $ updateGameField r s xs
 
 gameNotFinished :: [Int] -> Bool
 gameNotFinished xs = foldr1 (||) $ map (/=0) xs
 
-unzipGame :: [(Int, Int)] -> [Int]
-unzipGame xs = snd $ unzip xs
+-- takes a gamefield, row, and how may stones should be removed
+updateGameField::Int -> Int -> [Int] -> [Int]
+updateGameField r s xs = fst (splitAt (r) xs) ++  [(xs!!r) - s] ++  snd (splitAt (r+1) xs)
 
 printGameField :: [Int] -> IO ()
-printGameField [] = return ()
-printGameField (x:xs) = do  putStrLn $ unwords $ [show x] ++ replicate x "*"
-                            printGameField xs
+printGameField xs = printGameField' [5,4..0] xs
+-- helper function
+printGameField' :: [Int] ->[Int] -> IO ()
+printGameField' num (x:[]) = return ()
+printGameField' (n:num) xs = do  putStrLn $ unwords $ [show n] ++ replicate x "*"
+                                 printGameField' num (init xs)
+    where
+        x = last xs
