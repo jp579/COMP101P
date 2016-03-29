@@ -52,3 +52,27 @@ printGameField' (n:num) xs = do  putStrLn $ unwords $ [show n] ++ replicate x "*
                                  printGameField' num (init xs)
     where
         x = last xs
+
+
+-- change any number to Binary
+toBinary :: Int -> [Int]
+toBinary 0 = [0]
+toBinary 1 = [1]
+toBinary x = (toBinary (div x 2)) ++ [(mod x 2)]
+
+-- complete a Binary to a specific length by appending 0 to the front
+completeBinary :: Int -> [Int] -> [Int]
+completeBinary l b  | length b == l = b
+                    | otherwise     = completeBinary l $ 0:b
+
+-- take the parity: iterate through each col and return 0 if number of 1's even, 0 otherwise
+-- returns True, if state is a kernel, False otherwise
+-- e.g. [[0,0,1,1], [0,1,1,1], [0,1,0,0]] -> True
+parity :: [[Int]] -> Bool
+parity xss = (==) 0 $ sum $ parity' (y-1) xss
+    where
+        y = length $ (xss!!0)
+
+parity' :: Int -> [[Int]] -> [Int]
+parity' 0 xss = [(sum[(xs!!0) | xs <- xss]) `mod` 2]
+parity' y xss = [(sum[(xs!!y) | xs <- xss]) `mod` 2] ++ parity' (y-1) xss
