@@ -3,7 +3,7 @@ import Control.Monad
 
 --http://www.cdf.toronto.edu/~ajr/270/probsess/03/strategy.html
 --TODO: just allow each player to take away 1,3, or 4 stones
---TODO: implement robot algorithm
+--TODO: write brute force algorithm for AI
 
 main = do
     game 0 [0..5]
@@ -69,10 +69,8 @@ completeBinary l b  | length b == l = b
 -- returns True, if state is a kernel, False otherwise
 -- e.g. [[0,0,1,1], [0,1,1,1], [0,1,0,0]] -> True
 parity :: [[Int]] -> Bool
-parity xss = (==) 0 $ sum $ parity' (y-1) xss
-    where
-        y = length $ (xss!!0)
+parity xss = (==) 0 $ sum $ parity' xss $ length $ (xss!!0)
 
-parity' :: Int -> [[Int]] -> [Int]
-parity' 0 xss = [(sum[(xs!!0) | xs <- xss]) `mod` 2]
-parity' y xss = [(sum[(xs!!y) | xs <- xss]) `mod` 2] ++ parity' (y-1) xss
+parity' :: [[Int]] -> Int -> [Int]
+parity' xss 0 = [(sum[(xs!!0) | xs <- xss]) `mod` 2]
+parity' xss y = [(sum[(xs!!(y-1)) | xs <- xss]) `mod` 2] ++ parity' xss (y-2)
