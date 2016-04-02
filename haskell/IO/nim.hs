@@ -53,7 +53,6 @@ printGameField' (n:num) xs = do  putStrLn $ unwords $ [show n] ++ replicate x "*
     where
         x = last xs
 
-
 -- change any number to Binary
 toBinary :: Int -> [Int]
 toBinary 0 = [0]
@@ -73,4 +72,18 @@ parity xss = (==) 0 $ sum $ parity' xss $ length $ (xss!!0)
 
 parity' :: [[Int]] -> Int -> [Int]
 parity' xss 0 = [(sum[(xs!!0) | xs <- xss]) `mod` 2]
-parity' xss y = [(sum[(xs!!(y-1)) | xs <- xss]) `mod` 2] ++ parity' xss (y-2)
+parity' xss y = [(sum[(xs!!(y-1)) | xs <- xss]) `mod` 2] ++ parity' xss (y-1)
+
+-- check whether AI is in kernel, if yes -> make intelligent move
+-- else make random move
+-- return a tuple, with a (row, stones)
+
+checkKernel :: [[Int]] -> (Int, Int)
+checkKernel xss | parity xss    = findMove xss
+                | otherwise     = randomMove xss
+
+findMove :: [[Int]] -> (Int, Int)
+findMove xss = (1,1)
+
+randomMove :: [[Int]] -> (Int, Int)
+randomMove xss = (2,1)
