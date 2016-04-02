@@ -59,6 +59,15 @@ toBinary 0 = [0]
 toBinary 1 = [1]
 toBinary x = (toBinary (div x 2)) ++ [(mod x 2)]
 
+fromBinary :: [Int] -> Int
+fromBinary xs = iterator xs
+    where
+        iterator (x:[])  =  x * 1
+        iterator (x:xs)  =  (+) (iterator xs) $ (*) x $ (^) 2 $ length xs
+
+pow :: Int -> Int -> Int
+pow x y = x^y
+
 -- complete a Binary to a specific length by appending 0 to the front
 completeBinary :: Int -> [Int] -> [Int]
 completeBinary l b  | length b == l = b
@@ -83,7 +92,10 @@ checkKernel xss | parity xss    = findMove xss
                 | otherwise     = randomMove xss
 
 findMove :: [[Int]] -> (Int, Int)
-findMove xss = (1,1)
+findMove xss = (2,1)
 
 randomMove :: [[Int]] -> (Int, Int)
 randomMove xss = (2,1)
+
+movePossible :: [Int] -> Int -> Int -> Bool
+movePossible xs r s = (<=) s $ xs!!r
