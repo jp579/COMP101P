@@ -60,13 +60,9 @@ toBinary 1 = [1]
 toBinary x = (toBinary (div x 2)) ++ [(mod x 2)]
 
 fromBinary :: [Int] -> Int
-fromBinary xs = iterator xs
-    where
-        iterator (x:[])  =  x * 1
-        iterator (x:xs)  =  (+) (iterator xs) $ (*) x $ (^) 2 $ length xs
+findBinary (x:[])  =  x * 1
+findBinary (x:xs)  =  (+) (iterator xs) $ (*) x $ (^) 2 $ length xs
 
-pow :: Int -> Int -> Int
-pow x y = x^y
 
 -- complete a Binary to a specific length by appending 0 to the front
 completeBinary :: Int -> [Int] -> [Int]
