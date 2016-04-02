@@ -27,7 +27,7 @@ game p xs = do
                 -- check whether the move is a valid one
                 -- r is beteen rows 1 and 5 and if there are enough
                 -- stones left in the row
-                if (elem r [1..5]) && (elem s [1..(xs!!r)]) then
+                if (movePossible xs r s) then
                     game p' $ updateGameField r s xs
                 else do
                     putStrLn ""
@@ -68,6 +68,10 @@ completeBinary :: Int -> [Int] -> [Int]
 completeBinary l b  | length b == l = b
                     | otherwise     = completeBinary l $ 0:b
 
+findCompleteLength :: [[Int]] -> Int
+findCompleteLength xss = maximum $ map (length) xss
+
+
 -- take the parity: iterate through each col and return 0 if number of 1's even, 0 otherwise
 -- returns True, if state is a kernel, False otherwise
 -- e.g. [[0,0,1,1], [0,1,1,1], [0,1,0,0]] -> True
@@ -81,16 +85,29 @@ parity' xss y = [(sum[(xs!!(y-1)) | xs <- xss]) `mod` 2] ++ parity' xss (y-1)
 -- check whether AI is in kernel, if yes -> make intelligent move
 -- else make random move
 -- return a tuple, with a (row, stones)
-
 checkKernel :: [[Int]] -> (Int, Int)
-checkKernel xss | parity xss    = findMove xss
-                | otherwise     = randomMove xss
+checkKernel xss | parity xss    = randomMove xss
+                | otherwise     = findMove xss
 
 findMove :: [[Int]] -> (Int, Int)
-findMove xss = (2,1)
+findMove xss = findMove' xss 1 $ (+) (-1) $ length xss
+    where
+        findMove' xss s r | s > (fromBinary (xss!!r))    = findMove' xss 1 (r-1)
+                          | parity (updateGameFieldBinary xss s r)      = (r, s)
+                          | otherwise                    = findMove' xss (s+1) r
+
+updateGameFieldBinary :: [[Int]] -> Int -> Int -> [[Int]]
+updateGameFieldBinary xss s r = map (completeBinary l') $ newBinField xss s r
+    where
+        l' = maximum $ map (length) $ newBinField xss s r
+
+newBinField :: [[Int]] -> Int -> Int -> [[Int]]
+newBinField xss s r =  map (toBinary) $ updateGameField r s $ map (fromBinary) xss
+
 
 randomMove :: [[Int]] -> (Int, Int)
 randomMove xss = (2,1)
 
 movePossible :: [Int] -> Int -> Int -> Bool
-movePossible xs r s = (<=) s $ xs!!r
+movePossible xs r s | r < (length xs) = (<=) s $ xs!!r
+                    | otherwise       = False
