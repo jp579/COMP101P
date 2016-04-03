@@ -5,7 +5,7 @@ import Control.Monad
 --TODO: game crashes when player makes move 5,1 at the beginning
 
 main = do
-    game 1 [0..5]
+    game 0 [0..5]
 
 -- Player -> Gamefield -> IO ()
 game :: Int -> [Int] -> IO ()
@@ -15,8 +15,8 @@ game p xs = do
             if (gameNotFinished xs) then do
                 if p == 0 then do
                     printGameField xs
-                    print $ "player in Kernel:"
-                    print $  parity $ map (toBinary) xs
+                    --print $ "player in Kernel:"
+                    --print $  kernel $ map (toBinary) xs
                     print $ "Player " ++ (show (p+1)) ++ "'s turn"
                     putStrLn " "
 
@@ -37,13 +37,13 @@ game p xs = do
                         print "not valid input"
                         game p xs
                 else do
-                    printGameField xs
-                    print "computer in Kernel:"
-                    print $ parity $ map (toBinary) xs
+                    --printGameField xs
+                    --print "computer in Kernel:"
+                    --print $ kernel $ map (toBinary) xs
                     let move    = botMove $ map (toBinary) xs
                         r       = fst move
                         s       = snd move
-                    print $ "Computer moved to" ++ (show move)
+                    --print $ "Computer moved to" ++ (show move)
                     game p' $updateGameField r s xs
 
             else print $ "finished : Player " ++ (show (p'+1)) ++ " lost"
@@ -87,31 +87,43 @@ findCompleteLength :: [[Int]] -> Int
 findCompleteLength xss = maximum $ map (length) xss
 
 
--- take the parity: iterate through each col and return 0 if number of 1's even, 0 otherwise
+-- take the kernel: iterate through each col and return 0 if number of 1's even, 0 otherwise
 -- returns True, if state is a kernel, False otherwise
 -- e.g. [[0,0,1,1], [0,1,1,1], [0,1,0,0]] -> True
-parity :: [[Int]] -> Bool
-parity xss = (==) 0 $ sum $ parity' xss $ length $ (xss!!0)
+kernel :: [[Int]] -> Bool
+kernel xss = (==) 0 $ sum $ kernel' xss $ length $ (xss!!0)
 
-parity' :: [[Int]] -> Int -> [Int]
-parity' xss 0 = [(sum[(xs!!0) | xs <- xss]) `mod` 2]
-parity' xss y = [(sum[(xs!!(y-1)) | xs <- xss]) `mod` 2] ++ parity' xss (y-1)
+kernel' :: [[Int]] -> Int -> [Int]
+kernel' xss 0 = [(sum[(xs!!0) | xs <- xss]) `mod` 2]
+kernel' xss y = [(sum[(xs!!(y-1)) | xs <- xss]) `mod` 2] ++ kernel' xss (y-1)
+
+parity :: [Int] -> Int
+parity xs   | odd f'        = 1
+            | otherwise     = 0
+    where
+        f' = length $ filter(==1) xs
+
+-- transposes a matrix
+-- [[0 ,1]       becomes   [[0, 0], [1,1]]
+--  [0, 1]]
+-- needed in order to find out if we are in a kernel or not
+
 
 -- check whether AI is in kernel, if yes -> make intelligent move
 -- else make random move
 -- return a tuple, with a (row, stones)
 botMove :: [[Int]] -> (Int, Int)
-botMove xss | parity xss    = randomMove xss
+botMove xss | kernel xss    = randomMove xss
             | otherwise     = findMove xss
 
 -- this tries to bring the computer into a state from which the player
--- cannot move into a parity
+-- cannot move into a kernel
 findMove :: [[Int]] -> (Int, Int)
 findMove xss = findMove' xss 1 $ (+) (-1) $ length xss
     where
         findMove' xss s r | r < 0                        = randomMove xss
                           | s > (fromBinary (xss!!r))    = findMove' xss 1 (r-1)
-                          | not (parity (updateGameFieldBinary xss s r))      = (r, s)
+                          | not (kernel (updateGameFieldBinary xss s r))      = (r, s)
                           | otherwise                    = findMove' xss (s+1) r
 
 updateGameFieldBinary :: [[Int]] -> Int -> Int -> [[Int]]
